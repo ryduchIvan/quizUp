@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="quiz-over-modal">
+		<div class="content">
+			<h1 class="modal-title">Хороший результат</h1>
+			<p>
+				<span class="correct-answer"></span>из
+				<span class="number-of-all-ques-2"></span>вопросов
+			</p>
+			<button class="btn-try-again">Try again</button>
+		</div>
+	</div>
+	<div class="quiz-container">
+		<div class="question-number">
+			<h3>Вопрос
+				<span class="number-of-ques"></span>
+				из
+				<span class="number-of-all-ques"></span>
+			</h3>
+		</div>
+		<div class="question"></div>
+		<div class="options">
+			<div data-id="0" class="option option1">Вопрос1</div>
+			<div data-id="1" class="option option2">Вопрос2</div>
+			<div data-id="2" class="option option3">Вопрос3</div>
+			<div data-id="3" class="option option4">Вопрос4</div>
+		</div>
+		<div class="button">
+			<button class="btn-next">Next</button>
+		</div>
+		<div class="answers-tracker">
+
+		</div>
+	</div>
+	<script src="script.js"></script>
+</body>
+
+</html>
