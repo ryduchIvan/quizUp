@@ -13,6 +13,7 @@ const quizModal = document.querySelector(`.quiz-over-modal`);
 const correctAnswer = document.querySelector(`.correct-answer`);
 const numberOfAllQuesModal = document.querySelector(`.number-of-all-ques-2`);
 const btnTryAgain = document.querySelector(`.btn-try-again`);
+const modalTitle = document.querySelector(`.modal-title`);
 //родитель для маркеров 
 const answerTracker = document.querySelector(`.answers-tracker`);
 //доп переменые 
@@ -68,7 +69,9 @@ let questions = [
 
 numberOfAllQuestion.innerHTML = questions.length;
 
-function load() {
+let completedAnswer = [];
+
+function load(params) {
 	question.innerHTML = questions[indexOfQuestion].question;
 
 	option1.innerHTML = questions[indexOfQuestion].option[0];
@@ -80,9 +83,7 @@ function load() {
 	numberOfQuestion.innerHTML = indexOfPage;
 }
 
-let completedAnswer = [];
-
-function randomQuestions() {
+function randomQuestion(params) {
 	let randomNumber = Math.floor(Math.random() * questions.length);
 	let questionDuplicate = false;
 
@@ -96,7 +97,7 @@ function randomQuestions() {
 				}
 			});
 			if (questionDuplicate == true) {
-				randomQuestions();
+				randomQuestion();
 			} else {
 				indexOfQuestion = randomNumber;
 				load();
@@ -107,18 +108,18 @@ function randomQuestions() {
 		}
 	}
 	completedAnswer.push(indexOfQuestion);
+	console.log(completedAnswer);
 }
-
 
 for (let item of optionElements) {
 	item.addEventListener(`click`, function (event) {
 		if (event.target.dataset.id == questions[indexOfQuestion].rightAnswer) {
 			event.target.classList.add(`correct`);
-			styleAnswerCircle(`correct`)
+			styleCircleAnswer(`correct`)
 			score++;
 		} else {
 			event.target.classList.add(`wrong`);
-			styleAnswerCircle(`wrong`);
+			styleCircleAnswer(`wrong`)
 		}
 		disabledAnswer();
 	})
@@ -132,31 +133,20 @@ function disabledAnswer() {
 		}
 	}
 }
-
 function enabledAnswer() {
-	optionElements.forEach(function (item) {
-		item.classList.remove(`correct`, `wrong`, `disabled`);
-	})
+	for (let item of optionElements) {
+		item.classList.remove(`correct`, `disabled`, `wrong`);
+	}
 }
-function styleAnswerCircle(cssClass) {
+function styleCircleAnswer(cssClass) {
 	answerTracker.children[indexOfPage - 1].classList.add(cssClass);
 }
 
-function createAnswerCircle() {
-	for (let item of questions) {
+function createCircleAnswer() {
+	for (let i = 0; i < questions.length; i++) {
 		let circle = document.createElement(`div`);
 		circle.classList.add(`answer-circle`);
-
 		answerTracker.appendChild(circle);
-	}
-}
-
-function validate() {
-	if (option1.classList.contains(`disabled`)) {
-		randomQuestions();
-		enabledAnswer();
-	} else {
-		alert(`Выберите вариант ответа`);
 	}
 }
 
@@ -164,16 +154,27 @@ btnNext.addEventListener(`click`, function () {
 	validate();
 })
 
-function quizOver(params) {
+function validate() {
+	if (!option1.classList.contains(`disabled`)) {
+		alert(`Выбирите вариант ответа`);
+	} else {
+		randomQuestion();
+		enabledAnswer();
+	}
+}
+
+function quizOver() {
 	quizModal.classList.add(`show-modal`);
 	if (score == 0 || score > 1) {
-		correctAnswer.innerHTML = score + "  правельных ответов ";
-	} else if (score == 1) {
-		correctAnswer.innerHTML = score + "  правельных ответ ";
+		correctAnswer.innerHTML = score + "  правельных ответов" + " ";
+	} else {
+		correctAnswer.innerHTML = score + "  правельный ответ" + " ";
 	}
 	numberOfAllQuesModal.innerHTML = questions.length + " ";
-	if (score > 2) {
-		document.querySelector(`.modal-title`).innerHTML = "Плохой результат"
+	if (score < 2) {
+		modalTitle.innerHTML = "Плохой результат"
+	} else {
+		modalTitle.innerHTML = "Хороший результат"
 	}
 }
 
@@ -182,6 +183,6 @@ btnTryAgain.addEventListener(`click`, function () {
 })
 
 window.addEventListener(`load`, function () {
-	randomQuestions();
-	createAnswerCircle()
+	randomQuestion();
+	createCircleAnswer()
 })
